@@ -1,257 +1,411 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>To Do App Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Haitian Profiles</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: white;
+<style>
 
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+}
 
-        /* MAIN WRAPPER (SIDEBAR + CONTENT) */
-        .container {
-            display: flex;
-            flex: 1;
-        }
+body{
+    background:black;
+    color:white;
+    overflow-x:hidden;
+}
 
-        /* SIDEBAR */
-        aside {
-            width: 250px;
-            background: #111827;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-        }
+/* ================= BACKGROUND ================= */
+.background-slider{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:-2;
+    background-size:cover;
+    background-position:center;
+    filter:brightness(0.72);
+}
 
-        aside img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #22c55e;
-            margin-bottom: 10px;
-        }
+.overlay{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:
+        linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.15)),
+        linear-gradient(to bottom, rgba(0,0,0,0.25), transparent);
+    z-index:-1;
+}
 
-        /* MAIN */
-        .main {
-            flex: 1;
-            padding: 20px;
-        }
+/* ================= NAV ================= */
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    display:flex;
+    align-items:center;
 
-        h2 {
-            margin-top: 0;
-        }
+    padding:14px 40px;
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid rgba(255,255,255,0.08);
+    z-index:1000;
+}
 
-        input, textarea {
-            padding: 10px;
-            width: 250px;
-            margin: 5px 0;
-            border-radius: 6px;
-            border: none;
-            outline: none;
-        }
+/* LEFT GROUP (LOGO + SEARCH) */
+.left-group{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
 
-        button {
-            padding: 10px;
-            margin: 5px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+/* LOGO + IMAGE */
+.logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+    font-weight:600;
+    letter-spacing:1px;
+    white-space:nowrap;
+}
 
-        .add { background: #22c55e; color: white; }
-        .del { background: #ef4444; color: white; }
-        .show { background: #3b82f6; color: white; }
+.logo img{
+    width:28px;
+    height:28px;
+    object-fit:contain;
+}
 
-        table {
-            margin-top: 15px;
-            width: 100%;
-            border-collapse: collapse;
-            display: none;
-            background: white;
-            color: black;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+/* SEARCH CENTER */
+.nav-search{
+    display:flex;
+    align-items:center;
+}
 
-        th {
-            background: #3b82f6;
-            color: white;
-            padding: 10px;
-        }
+.nav-search input{
+    width:220px;
+    padding:10px 14px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(0,0,0,0.45);
+    color:white;
+    outline:none;
+    transition:0.3s;
+}
 
-        td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
+.nav-search input:focus{
+    width:270px;
+    background:rgba(0,0,0,0.65);
+    border:1px solid rgba(255,255,255,0.35);
+}
 
-        /* COMMENTS */
-        .comments {
-            margin-top: 30px;
-        }
+/* NAV LINKS PUSHED RIGHT */
+.nav-links{
+    display:flex;
+    list-style:none;
+    gap:22px;
+    margin-left:auto; /* 🔥 THIS FIXES EVERYTHING */
+    align-items:center;
+}
 
-        .comment-box {
-            background: #1f2937;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 8px;
-        }
+.nav-links li{
+    position:relative;
+}
 
-        /* FOOTER */
-        .footer {
-            background: #111827;
-            text-align: center;
-            padding: 20px;
-            border-top: 2px solid #22c55e;
-        }
+/* LINKS */
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    font-size:14px;
+    opacity:0.85;
+    transition:0.25s ease;
+}
 
-        .footer a {
-            color: #3b82f6;
-            text-decoration: none;
-        }
+.nav-links a:hover{
+    opacity:1;
+    transform:translateY(-2px);
+}
 
-        .footer a:hover {
-            text-decoration: underline;
-        }
+/* DROPDOWN */
+.dropdown{
+    position:absolute;
+    top:32px;
+    left:0;
+    background:rgba(20,20,20,0.97);
+    min-width:200px;
+    border-radius:10px;
+    overflow:hidden;
 
-    </style>
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(10px);
+    transition:0.25s ease;
+}
+
+.nav-links li:hover .dropdown{
+    opacity:1;
+    visibility:visible;
+    transform:translateY(0);
+}
+
+.dropdown a{
+    display:block;
+    padding:10px;
+}
+
+.dropdown a:hover{
+    background:rgba(255,255,255,0.1);
+}
+
+/* AUTH BUTTONS FAR RIGHT */
+.auth-buttons{
+    display:flex;
+    gap:10px;
+    margin-left:20px;
+}
+
+.login-btn, .signup-btn{
+    text-decoration:none;
+    padding:9px 16px;
+    border-radius:8px;
+    font-weight:600;
+    font-size:13px;
+    transition:0.3s;
+}
+
+.login-btn{
+   background:#0A84FF;
+    color:white;
+}
+
+.signup-btn{
+    background:#0A84FF;
+    color:white;
+}
+
+.login-btn:hover,
+.signup-btn:hover{
+    transform:scale(1.05);
+}
+
+/* HERO */
+.hero{
+    height:90vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    padding:80px 60px;
+}
+
+.hero h1{
+    font-size:4rem;
+    max-width:700px;
+}
+
+.hero p{
+    max-width:600px;
+    margin-top:15px;
+    opacity:0.85;
+}
+
+footer{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    padding:18px 10px;
+
+    background:rgba(0,0,0,0.35);
+    backdrop-filter:blur(14px);
+    border-top:1px solid rgba(255,255,255,0.08);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* CENTER WRAPPER */
+.footer-center{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+    text-align:center;
+}
+
+/* LOGO */
+.footer-logo{
+    font-size:14px;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+/* SOCIAL ICONS */
+.socials{
+    display:flex;
+    gap:12px;
+}
+
+.socials a{
+    width:34px;
+    height:34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    text-decoration:none;
+
+    font-size:12px;
+    transition:0.3s;
+}
+
+.socials a:hover{
+    transform:translateY(-3px) scale(1.1);
+    background:#0A84FF;
+}
+
+/* TEXT */
+.footer-text{
+    font-size:12px;
+    opacity:0.7;
+}
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="background-slider"></div>
+<div class="overlay"></div>
 
-    <!-- SIDEBAR -->
-    <aside>
-        <img src="Prroject.jpg" alt="Profile">
-        <h3>Rood Wendy Robert</h3>
-        <p>Admin Dashboard</p>
-    </aside>
+<nav>
 
-    <!-- MAIN CONTENT -->
-    <div class="main">
+    <!-- LEFT SIDE -->
+    <div class="left-group">
 
-        <h2>🔥 To Do Dashboard</h2>
+        <div class="logo">
+            <img src="images/hp Logo.png" alt="logo">
+            Haitian Profiles
+        </div>
 
-        <input id="add" type="text" placeholder="Add task">
-        <button class="add" onclick="addTask()">Add</button>
-
-        <br>
-
-        <input id="delete" type="text" placeholder="Delete task">
-        <button class="del" onclick="deleteTask()">Delete</button>
-
-        <br>
-
-        <button class="show" onclick="displayTask()">Display</button>
-
-        <p id="check"></p>
-
-        <table id="taskTable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Task</th>
-                </tr>
-            </thead>
-            <tbody id="output"></tbody>
-        </table>
-
-        <!-- COMMENTS -->
-        <div class="comments">
-
-            <h3>💬 Comments</h3>
-
-            <textarea id="commentInput" placeholder="Write comment..."></textarea>
-            <br>
-            <button onclick="addComment()">Post</button>
-
-            <div id="commentList"></div>
-
+        <div class="nav-search">
+            <input type="text" placeholder="Search profiles...">
         </div>
 
     </div>
 
-</div>
+    <!-- NAV LINKS -->
+    <ul class="nav-links">
 
-<!-- FOOTER -->
-<footer class="footer">
-    <p>📞 Contact Me: +1 (347) 289-1676</p>
+        <li>
+            <a href="#">Sports</a>
+            <div class="dropdown">
+                <a href="#">Football</a>
+                <a href="#">Basketball</a>
+                <a href="#">Volleyball</a>
+                <a href="#">Tennis</a>
+            </div>
+        </li>
 
-    <p>
-        🔗 Instagram:
-        <a href="https://www.instagram.com/rood_wendy?igsh=MXc4d2JvbDFjOHpqMw%3D%3D&utm_source=qr" target="_blank">Rood</a>
-        |
-        📘 Facebook:
-        <a href="https://www.facebook.com/share/15mnStRKDwj/?mibextid=wwXIfr" target="_blank">Rood Wendy</a>
-    </p>
+        <li>
+            <a href="#">Music/Art</a>
+            <div class="dropdown">
+                <a href="#">Kompa</a>
+                <a href="#">Racine</a>
+                <a href="#">Rap</a>
+            </div>
+        </li>
 
-    <p>© 2026 Rood Wendy Robert | All Rights Reserved</p>
-</footer>
+        <li>
+            <a href="#">Media</a>
+            <div class="dropdown">
+                <a href="#">TV</a>
+                <a href="#">Radio</a>
+                <a href="#">YouTube</a>
+            </div>
+        </li>
+
+        <li>
+            <a href="#">More</a>
+            <div class="dropdown">
+                <a href="#">Politics</a>
+                <a href="#">Cinema</a>
+                <a href="#">Health</a>
+                <a href="#">Diaspora</a>
+            </div>
+        </li>
+
+    </ul>
+
+    <!-- AUTH RIGHT -->
+    <div class="auth-buttons">
+        <a class="login-btn" href="login.html">Login</a>
+        <a class="signup-btn" href="signup.html">Sign Up</a>
+    </div>
+
+</nav>
+
+<section class="hero">
+<h1>Discover Haitian Profiles</h1>
+<p>Athletes, artists, leaders, entrepreneurs, and innovators shaping Haiti and the world.</p>
+</section>
+
+
 
 <script>
 
-    let Task = [];
-    let comments = [];
+const images = [
+    "images/beautiful-city-haiti.webp",
+    "images/cita,jpeg.jpg",
+    "images/sea.jpeg"
+];
 
-    function addTask() {
-        let value = document.getElementById("add").value;
-        Task.push(value);
-    }
+let i = 0;
+const bg = document.querySelector(".background-slider");
 
-    function deleteTask() {
-        let value = document.getElementById("delete").value.trim();
+bg.style.backgroundImage = `url('${images[0]}')`;
 
-        if (Task.includes(value)) {
-            Task = Task.filter(item => item !== value);
-            document.getElementById("check").innerText = "Task Deleted Successfully!";
-        } else {
-            document.getElementById("check").innerText = "Not Found";
-        }
-    }
-
-    function displayTask() {
-        let table = "";
-
-        for (let i = 0; i < Task.length; i++) {
-            table += `
-                <tr>
-                    <td>${i + 1}</td>
-                    <td>${Task[i]}</td>
-                </tr>
-            `;
-        }
-
-        document.getElementById("output").innerHTML = table;
-        document.getElementById("taskTable").style.display = "table";
-    }
-
-    function addComment() {
-        let text = document.getElementById("commentInput").value;
-
-        comments.push(text);
-
-        renderComments();
-    }
-
-    function renderComments() {
-        let html = "";
-
-        for (let i = 0; i < comments.length; i++) {
-            html += `<div class="comment-box">${comments[i]}</div>`;
-        }
-
-        document.getElementById("commentList").innerHTML = html;
-    }
+setInterval(() => {
+    i = (i + 1) % images.length;
+    bg.style.backgroundImage = `url('${images[i]}')`;
+}, 4000);
 
 </script>
+<footer>
 
+    <div class="footer-center">
+
+        <div class="footer-logo">
+            Haitian Profiles
+        </div>
+
+        <div class="socials">
+
+            <a href="#" title="Facebook">F</a>
+            <a href="#" title="Instagram">IG</a>
+            <a href="#" title="Twitter/X">X</a>
+            <a href="#" title="YouTube">YT</a>
+
+        </div>
+
+        <div class="footer-text">
+            © 2026 Haitian Profiles • All rights reserved
+        </div>
+
+    </div>
+
+</footer>
 </body>
 </html>

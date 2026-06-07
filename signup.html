@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up - Haitian Profiles</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+}
+
+body{
+    color:white;
+    overflow:hidden;
+}
+
+/* BACKGROUND */
+.background-slider{
+    position:fixed;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    filter:brightness(0.55);
+    z-index:-2;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.65), rgba(0,0,0,0.9));
+    z-index:-1;
+}
+
+/* FORM CONTAINER */
+.container{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.card{
+    width:420px;
+    padding:35px;
+    border-radius:18px;
+    background:rgba(255,255,255,0.06);
+    backdrop-filter:blur(18px);
+    border:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+/* INPUTS */
+input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.2);
+    background:rgba(0,0,0,0.4);
+    color:white;
+    outline:none;
+}
+
+input::placeholder{
+    color:rgba(255,255,255,0.6);
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    background:#0A84FF;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.03);
+}
+
+/* LINK */
+p{
+    text-align:center;
+    margin-top:15px;
+    font-size:13px;
+}
+
+a{
+    color:#0A84FF;
+    text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="background-slider"></div>
+<div class="overlay"></div>
+
+<div class="container">
+<div class="card">
+
+<h2>Create Account</h2>
+
+<input type="text" placeholder="First Name">
+<input type="text" placeholder="Last Name">
+<input type="email" placeholder="Email">
+<input type="text" placeholder="Phone Number">
+<input type="password" placeholder="Password">
+<input type="password" placeholder=" Confirm Password">
+
+<button>Create Account</button>
+
+<p>Already have an account? <a href="login.html">Login</a></p>
+
+</div>
+</div>
+<footer>
+
+    <div class="footer-text">
+        © 2026 Haitian Profiles • Built with modern UI design
+    </div>
+
+    <div class="socials">
+
+        <a href="#" title="Facebook">F</a>
+        <a href="#" title="Instagram">IG</a>
+        <a href="#" title="Twitter/X">X</a>
+        <a href="#" title="YouTube">YT</a>
+
+    </div>
+
+</footer>
+<script>
+const images = [
+"images/beautiful-city-haiti.webp",
+"images/cita,jpeg.jpg",
+"images/saut.webp"
+];
+
+let i=0;
+const bg=document.querySelector(".background-slider");
+
+bg.style.backgroundImage=`url('${images[0]}')`;
+
+setInterval(()=>{
+i=(i+1)%images.length;
+bg.style.backgroundImage=`url('${images[i]}')`;
+},4000);
+</script>
+
+</body>
+</html>
